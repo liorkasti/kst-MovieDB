@@ -1,29 +1,11 @@
 import {QueryClient} from 'react-query';
-import {toast} from 'react-toastify';
+import {useQueryErrorHandler} from '../hooks/useQueryErrorHandler';
 
-function queryErrorHandler(error: unknown): void {
-  const title =
-    error instanceof Error ? error.message : 'Error connecting to server';
-
-  // Close all existing toasts
-  toast.dismiss();
-
-  // Display the new toast
-  toast.error(title, {
-    position: 'top-right',
-    autoClose: 5000, // Close after 5 seconds
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
-}
-
-export function generateQueryClient(): QueryClient {
+export const generateQueryClient = (): QueryClient => {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // onError: queryErrorHandler,
+        onError: useQueryErrorHandler,
         staleTime: 600000, // 10 minutes
         cacheTime: 900000,
         refetchOnMount: false,
@@ -31,11 +13,11 @@ export function generateQueryClient(): QueryClient {
         refetchOnReconnect: false,
       },
       mutations: {
-        // onError: queryErrorHandler,
+        onError: useQueryErrorHandler,
       },
     },
   });
-}
+};
 
 export const queryClient = generateQueryClient();
 

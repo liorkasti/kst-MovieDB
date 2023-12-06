@@ -1,14 +1,14 @@
-// queries/movies.ts
 import {useQuery} from 'react-query';
+import {axiosInstance} from '../axiosInstance';
+import {api} from '../axiosInstance/constants';
 
 const fetchMovies = async (endpoint: string) => {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/${endpoint}?api_key=dac8bdc28c28affc1d1a4ac567abe4a0`,
-  );
-  if (!response.ok) {
-    throw new Error('Failed to fetch movies');
+  try {
+    const {data} = await axiosInstance.get(`${endpoint}${api.Authorization}`);
+    return data;
+  } catch (err) {
+    console.warn('Failed to fetch movies', err);
   }
-  return response.json();
 };
 
 export const useMovies = (endpoint: string) => {

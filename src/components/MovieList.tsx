@@ -1,34 +1,17 @@
 // Import necessary modules
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
-  View,
-  Text,
-  FlatList,
   ActivityIndicator,
+  FlatList,
   Image,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import axios from 'axios';
-import {useMovies} from '../hooks/useMovies';
+import {MovieListProps} from '../../shared/types';
 import {useFavorites} from '../hooks/useFavorites';
-
-// Define the TMDb API base URL and API key
-const baseURL = 'https://api.themoviedb.org/3/';
-const apiKey = '?api_key=dac8bdc28c28affc1d1a4ac567abe4a0';
-
-// Define the Movie type
-interface Movie {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string;
-  vote_average: number;
-}
-
-interface MovieListProps {
-  category: {name: string; endpoint: string};
-}
+import {useMovies} from '../hooks/useMovies';
 
 const MovieList: React.FC<MovieListProps> = ({category}) => {
   const {data: movies, isLoading} = useMovies(category.endpoint);
