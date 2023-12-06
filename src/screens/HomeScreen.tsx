@@ -9,15 +9,18 @@ import MovieList from '../components/MovieList';
 // import {fetchFavorites} from '../redux/actions';
 // import {RootStateType} from '../types'; // Assuming you have a RootStateType defined
 
-interface HomeScreenProps {
-  navigation: any; // Replace 'any' with the correct navigation prop type
-}
+interface HomeScreenProps {}
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+// Define the categories and their corresponding API endpoints
+const categories = [
+  {name: 'Popular', endpoint: 'movie/popular'},
+  {name: 'Top Rated', endpoint: 'movie/top_rated'},
+];
+
+const HomeScreen: React.FC<HomeScreenProps> = () => {
   // const [newsData, setNewsData] = useState<any[]>([]); // Replace 'any' with the correct type for your newsData
   // const [selected, setSelected] = useState<string[]>([]); // Replace 'string' with the correct type for your selected items
   const isDarkMode = useColorScheme() === 'dark';
-
   // const {user} = useSelector((state: RootStateType) => state.reducers);
   // const dispatch = useDispatch();
 
@@ -47,12 +50,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         styles.container,
         {backgroundColor: isDarkMode ? 'black' : 'white'},
       ]}>
-      <MovieList
-        category={{
-          name: 'Popular',
-          endpoint: 'movie/popular',
-        }}
-      />
+      <MovieList category={categories[0]} />
       {/* <SelectList
         setSelected={val => setSelected(val)}
         data={CATEGORIES}

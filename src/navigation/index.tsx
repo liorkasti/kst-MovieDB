@@ -21,7 +21,7 @@ const RootStackScreen: FC = () => {
   const getAppNavigationOptions = (): NativeStackNavigationOptions => {
     if (username) {
       return {
-        headerShown: true,
+        headerShown: false,
         title: username,
         headerTitleAlign: 'center',
         headerBackVisible: false,
@@ -43,7 +43,7 @@ const RootStackScreen: FC = () => {
         <RootStack.Screen
           name="AppNavigation"
           component={AppNavigation}
-          options={getAppNavigationOptions}
+          // options={getAppNavigationOptions}
         />
       </RootStack.Navigator>
     </NavigationContainer>

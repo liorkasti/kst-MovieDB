@@ -7,18 +7,15 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import {useMovies} from '../hooks/useMovies';
+import {useFavorites} from '../hooks/useFavorites';
 
 // Define the TMDb API base URL and API key
 const baseURL = 'https://api.themoviedb.org/3/';
 const apiKey = '?api_key=dac8bdc28c28affc1d1a4ac567abe4a0';
-
-// Define the categories and their corresponding API endpoints
-const categories = [
-  {name: 'Popular', endpoint: 'movie/popular'},
-  {name: 'Top Rated', endpoint: 'movie/top_rated'},
-];
 
 // Define the Movie type
 interface Movie {
@@ -29,36 +26,15 @@ interface Movie {
   vote_average: number;
 }
 
-// Define the component props
 interface MovieListProps {
   category: {name: string; endpoint: string};
 }
 
-// Define the component
 const MovieList: React.FC<MovieListProps> = ({category}) => {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {data: movies, isLoading} = useMovies(category.endpoint);
+  const {getFavorites, addFavorite, removeFavorite} = useFavorites();
 
-  useEffect(() => {
-    // Fetch movies when the component mounts
-    const fetchMovies = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${baseURL}${category.endpoint}${apiKey}`,
-        );
-        setMovies(response.data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, [category]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -72,7 +48,7 @@ const MovieList: React.FC<MovieListProps> = ({category}) => {
         {category.name}
       </Text>
       <FlatList
-        data={movies}
+        data={movies.results}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <View style={styles.movieContainer}>
@@ -87,13 +63,31 @@ const MovieList: React.FC<MovieListProps> = ({category}) => {
                 {item.title}
               </Text>
               <Text style={{marginBottom: 4}}>Rating: {item.vote_average}</Text>
-              <Text>{item.overview}</Text>
+              <Text style={{maxHeight: 100}}>{item.overview}</Text>
+              <TouchableOpacity
+                style={{marginTop: 10}}
+                onPress={() => handleToggleFavorite(item.id)}>
+                <Text>
+                  {getFavorites().includes(item.id)
+                    ? 'Remove from Favorites'
+                    : 'Add to Favorites'}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
       />
     </View>
   );
+
+  function handleToggleFavorite(movieId: number) {
+    console.log(movieId);
+    if (getFavorites().includes(movieId)) {
+      removeFavorite(movieId);
+    } else {
+      addFavorite(movieId);
+    }
+  }
 };
 
 const styles = StyleSheet.create({

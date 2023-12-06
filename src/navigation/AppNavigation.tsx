@@ -26,6 +26,7 @@ const AppNavigation: FC = () => {
         name={'Home'}
         component={HomeScreen}
         options={{
+          headerShown: false,
           tabBarLabel: 'Home'.toUpperCase(),
           tabBarIcon: ({color}) => <Text style={{color}}>Home</Text>,
         }}

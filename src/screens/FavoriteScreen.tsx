@@ -1,10 +1,11 @@
-import {Text, View} from 'react-native';
-import React, {FC} from 'react';
+// FavoriteScreen.tsx
+import React from 'react';
+import {View, Text} from 'react-native';
 import {useFavorites} from '../hooks/useFavorites';
 
-const ProfileScreen: FC = () => {
+const FavoriteScreen: React.FC = () => {
   const {getFavorites} = useFavorites();
-  console.log(`Total Favorites: ${getFavorites().length}`);
+
   return (
     <View style={{alignItems: 'center', margin: 16}}>
       <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Favorites</Text>
@@ -13,4 +14,4 @@ const ProfileScreen: FC = () => {
   );
 };
 
-export default ProfileScreen;
+export default FavoriteScreen;
