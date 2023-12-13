@@ -2,11 +2,9 @@ import React, {FC, useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {COLORS} from '../constants/theme';
-import {page} from '../screens/HomeScreen';
+import {PaginationProps} from '../../shared/types';
 
-interface PaginationProps {}
-
-const Pagination: FC<PaginationProps> = ({}) => {
+const Pagination: FC<PaginationProps> = ({currentPage, onPress}) => {
   const [disabled, setDisabled] = useState(true);
 
   return (
@@ -14,19 +12,19 @@ const Pagination: FC<PaginationProps> = ({}) => {
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0.4}
         onPress={() => {
-          page.value <= 1 ? null : page.value--;
-          setDisabled(true);
+          setDisabled(false);
+          onPress(previousValue => previousValue - 1);
         }}>
         <Icon name="chevrons-left" style={styles.icon} />
       </TouchableOpacity>
 
-      <Text style={styles.pagesIndication}>{`${page.value * 20 - 19}-${
-        page.value * 20
+      <Text style={styles.pagesIndication}>{`${currentPage * 20 - 19}-${
+        currentPage * 20
       }`}</Text>
 
       <TouchableOpacity
         onPress={() => {
-          page.value++;
+          onPress(previousValue => previousValue + 1);
           setDisabled(false);
         }}>
         <Icon name="chevrons-right" style={styles.icon} />

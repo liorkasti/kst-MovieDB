@@ -12,10 +12,20 @@ import {
 import {MovieListProps} from '../../shared/types';
 import {useFavorites} from '../hooks/useFavorites';
 import {useMovies} from '../hooks/useMovies';
+import {getFavorites} from '../state';
 
-const MovieList: React.FC<MovieListProps> = ({category}) => {
-  const {data: movies, isLoading} = useMovies(category.endpoint);
-  const {getFavorites, addFavorite, removeFavorite} = useFavorites();
+const MovieList: React.FC<MovieListProps> = ({category, page}) => {
+  const {data: movies, isLoading} = useMovies(category.endpoint, page);
+  const {addFavorite, removeFavorite} = useFavorites();
+
+  const handleToggleFavorite = (movieId: number) => {
+    console.log(movieId);
+    if (getFavorites().includes(movieId)) {
+      removeFavorite(movieId);
+    } else {
+      addFavorite(movieId);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -62,15 +72,6 @@ const MovieList: React.FC<MovieListProps> = ({category}) => {
       />
     </View>
   );
-
-  function handleToggleFavorite(movieId: number) {
-    console.log(movieId);
-    if (getFavorites().includes(movieId)) {
-      removeFavorite(movieId);
-    } else {
-      addFavorite(movieId);
-    }
-  }
 };
 
 const styles = StyleSheet.create({

@@ -2,16 +2,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
 import {useFavorites} from '../hooks/useFavorites';
 import {COLORS} from '../constants/theme';
+import {getFavorites} from '../state';
 
 const ProfileScreen: FC = () => {
-  const {data: favorites} = useFavorites();
-
-  console.log(`Total Favorites: ${favorites.length}`);
-
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Favorites</Text>
-      <Text>{`Total Favorites: ${favorites.length}`}</Text>
+      <Text>{`Total Favorites: ${getFavorites().length}`}</Text>
     </View>
   );
 };

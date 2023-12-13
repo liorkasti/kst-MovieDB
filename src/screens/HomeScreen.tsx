@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import MovieList from '../components/MovieList';
+import Pagination from '../components/Pagination';
 // import {SelectList} from 'react-native-dropdown-select-list';
 // import {useDispatch, useSelector} from 'react-redux';
 // import MediaCard from '../components/MediaCard';
@@ -18,6 +19,8 @@ const categories = [
 ];
 
 const HomeScreen: React.FC<HomeScreenProps> = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
   // const [newsData, setNewsData] = useState<any[]>([]); // Replace 'any' with the correct type for your newsData
   // const [selected, setSelected] = useState<string[]>([]); // Replace 'string' with the correct type for your selected items
   const isDarkMode = useColorScheme() === 'dark';
@@ -50,7 +53,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
         styles.container,
         {backgroundColor: isDarkMode ? 'black' : 'white'},
       ]}>
-      <MovieList category={categories[0]} />
+      <MovieList category={categories[0]} page={currentPage} />
       {/* <SelectList
         setSelected={val => setSelected(val)}
         data={CATEGORIES}
@@ -60,6 +63,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
         defaultOption={{key: '0', value: 'Choose Category'}}
       /> */}
       {/* <MediaCard data={newsData} /> */}
+      <Pagination currentPage={currentPage} onPress={setCurrentPage} />
     </View>
   );
 };

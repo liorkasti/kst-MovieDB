@@ -1,5 +1,3 @@
-import {Signal} from '@preact/signals';
-
 export interface MoviesQuery {
   data?: Movie[];
   isError?: boolean;
@@ -9,7 +7,7 @@ export interface MoviesQuery {
 }
 export interface MovieListProps {
   category: {name: string; endpoint: string};
-  page: Signal<number>;
+  page: number;
 }
 
 export interface MovieFetchProps {
@@ -22,4 +20,9 @@ export interface Movie {
   overview: string;
   poster_path: string;
   vote_average: number;
+}
+
+export interface PaginationProps {
+  currentPage: number;
+  onPress: (index: number) => void;
 }
