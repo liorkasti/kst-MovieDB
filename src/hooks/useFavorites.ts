@@ -1,25 +1,22 @@
-// queries/favorites.ts
-import {useQueryClient} from 'react-query';
+import {useQuery, useQueryClient} from 'react-query';
+import {getFavorites, queryClient} from '../state';
+import {Movie} from '../../shared/types';
 
-export const useFavorites = () => {
-  const queryClient = useQueryClient();
+export function useFavorites(): Movie[] {
+  const fallback: Movie[] | undefined = [];
+  const {data: favorites = fallback} = useQuery('favorites', getFavorites);
 
-  const getFavorites = () => {
-    return queryClient.getQueryData('favorites') || [];
-  };
-
+  console.log('data', favorites);
   const addFavorite = (movieId: number) => {
-    const favorites = getFavorites();
     queryClient.setQueryData('favorites', [...favorites, movieId]);
   };
 
   const removeFavorite = (movieId: number) => {
-    const favorites = getFavorites();
     queryClient.setQueryData(
       'favorites',
       favorites.filter(id => id !== movieId),
     );
   };
 
-  return {getFavorites, addFavorite, removeFavorite};
-};
+  return {data: favorites, addFavorite, removeFavorite};
+}
