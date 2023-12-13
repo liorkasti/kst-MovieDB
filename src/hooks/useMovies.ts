@@ -11,7 +11,7 @@ export const useMovies = (endpoint: string, page: number): MoviesQuery => {
     error,
     isSuccess,
   } = useQuery(['movies', endpoint, page], () => fetchMovies(endpoint, page));
-  console.log({isError, isLoading, data, error, isSuccess});
+  // console.log({isError, isLoading, data, error, isSuccess});
   if (isSuccess && !isError) {
     return {
       data: data as Movie[],

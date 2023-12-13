@@ -1,6 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
-import {useFavorites} from '../hooks/useFavorites';
 import {COLORS} from '../constants/theme';
 import {getFavorites} from '../state';
 

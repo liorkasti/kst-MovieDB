@@ -1,51 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, useColorScheme, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, useColorScheme} from 'react-native';
+import {SelectList} from 'react-native-dropdown-select-list';
 import MovieList from '../components/MovieList';
 import Pagination from '../components/Pagination';
-// import {SelectList} from 'react-native-dropdown-select-list';
-// import {useDispatch, useSelector} from 'react-redux';
-// import MediaCard from '../components/MediaCard';
-// import {CATEGORIES} from '../constants/categories';
-// import {fetchData} from '../hooks/useFetch';
-// import {fetchFavorites} from '../redux/actions';
-// import {RootStateType} from '../types'; // Assuming you have a RootStateType defined
+import {CATEGORIES, SELECTED_CATEGORIES} from '../constants';
 
-interface HomeScreenProps {}
-
-// Define the categories and their corresponding API endpoints
-const categories = [
-  {name: 'Popular', endpoint: 'movie/popular'},
-  {name: 'Top Rated', endpoint: 'movie/top_rated'},
-];
-
-const HomeScreen: React.FC<HomeScreenProps> = () => {
+const HomeScreen: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  // const [newsData, setNewsData] = useState<any[]>([]); // Replace 'any' with the correct type for your newsData
-  // const [selected, setSelected] = useState<string[]>([]); // Replace 'string' with the correct type for your selected items
+  const [selected, setSelected] = useState<number>(SELECTED_CATEGORIES[0].key);
   const isDarkMode = useColorScheme() === 'dark';
-  // const {user} = useSelector((state: RootStateType) => state.reducers);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(fetchFavorites(user));
-  //   }
-  // }, [user]);
-
-  // const handleSelection = (category: string) => {
-  //   fetchData(category, 'us')
-  //     .then(data => {
-  //       setNewsData(data.data);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   handleSelection(selected);
-  // }, [selected]);
 
   return (
     <View
@@ -53,16 +16,13 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
         styles.container,
         {backgroundColor: isDarkMode ? 'black' : 'white'},
       ]}>
-      <MovieList category={categories[0]} page={currentPage} />
-      {/* <SelectList
-        setSelected={val => setSelected(val)}
-        data={CATEGORIES}
-        save="value"
-        onSelect={() => handleSelection(selected)}
-        label="Category"
-        defaultOption={{key: '0', value: 'Choose Category'}}
-      /> */}
-      {/* <MediaCard data={newsData} /> */}
+      <SelectList
+        setSelected={(val: React.SetStateAction<number>) => setSelected(val)}
+        data={SELECTED_CATEGORIES}
+        save="key"
+        placeholder={'Choose Category'}
+      />
+      <MovieList category={CATEGORIES[selected - 1].value} page={currentPage} />
       <Pagination currentPage={currentPage} onPress={setCurrentPage} />
     </View>
   );

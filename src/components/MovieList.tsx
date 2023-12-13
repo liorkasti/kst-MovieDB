@@ -13,6 +13,7 @@ import {MovieListProps} from '../../shared/types';
 import {useFavorites} from '../hooks/useFavorites';
 import {useMovies} from '../hooks/useMovies';
 import {getFavorites} from '../state';
+import {api} from '../axiosInstance/constants';
 
 const MovieList: React.FC<MovieListProps> = ({category, page}) => {
   const {data: movies, isLoading} = useMovies(category.endpoint, page);
@@ -41,14 +42,14 @@ const MovieList: React.FC<MovieListProps> = ({category, page}) => {
         {category.name}
       </Text>
       <FlatList
-        data={movies.results}
+        data={movies?.results}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <View style={styles.movieContainer}>
             <Image
               style={styles.posterImage}
               source={{
-                uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+                uri: `${api.posterUrlBase}${item.poster_path}`,
               }}
             />
             <View style={{marginLeft: 8, flex: 1}}>

@@ -1,6 +1,6 @@
-import {useQuery, useQueryClient} from 'react-query';
-import {getFavorites, queryClient} from '../state';
+import {useQuery} from 'react-query';
 import {Movie} from '../../shared/types';
+import {getFavorites, queryClient} from '../state';
 
 export const useFavorites = () => {
   const fallback: Movie[] | undefined = [];
