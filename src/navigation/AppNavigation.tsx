@@ -19,7 +19,7 @@ const AppNavigation: FC = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: COLORS.movieDark,
-          height: 87,
+          // height: 87,
         },
       }}>
       <Tab.Screen
