@@ -1,9 +1,9 @@
 import {useQuery} from 'react-query';
-import {Movie, MoviesQuery} from '../../shared/types';
+import {MoviesAPIProps, MoviesQuery} from '../../../shared/types';
 import {fetchMovies} from './useFetchMovies';
 
 export const useMovies = (endpoint: string, page: number): MoviesQuery => {
-  const fallback: Movie[] | undefined = [];
+  const fallback: MoviesAPIProps | undefined = undefined;
   const {
     isError,
     isLoading,
@@ -14,7 +14,7 @@ export const useMovies = (endpoint: string, page: number): MoviesQuery => {
   // console.log({isError, isLoading, data, error, isSuccess});
   if (isSuccess && !isError) {
     return {
-      data: data as Movie[],
+      data: data as MoviesAPIProps,
       isLoading,
     };
   }

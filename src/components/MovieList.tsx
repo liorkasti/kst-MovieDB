@@ -1,5 +1,5 @@
 // Import necessary modules
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -9,15 +9,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {MovieListProps} from '../../shared/types';
+import {MovieListProps} from '../../../shared/types';
 import {useFavorites} from '../hooks/useFavorites';
 import {useMovies} from '../hooks/useMovies';
 import {getFavorites} from '../state';
 import {api} from '../axiosInstance/constants';
+import Pagination from './Pagination';
+import {useQueryClient} from 'react-query';
+import {fetchMovies} from '../hooks/useFetchMovies';
 
-const MovieList: React.FC<MovieListProps> = ({category, page}) => {
-  const {data: movies, isLoading} = useMovies(category.endpoint, page);
+const MovieList: React.FC<MovieListProps> = ({category}) => {
   const {addFavorite, removeFavorite} = useFavorites();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const {data: movies, isLoading} = useMovies(category.endpoint, currentPage);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (currentPage < movies?.total_pages) {
+      const nextPage = currentPage + 1;
+      queryClient.prefetchQuery(['movies', nextPage], () =>
+        fetchMovies(category.endpoint, nextPage),
+      );
+    }
+  }, [category.endpoint, currentPage, movies?.total_pages, queryClient]);
 
   const handleToggleFavorite = (movieId: number) => {
     console.log(movieId);
@@ -70,6 +85,11 @@ const MovieList: React.FC<MovieListProps> = ({category, page}) => {
             </View>
           </View>
         )}
+      />
+      <Pagination
+        currentPage={currentPage}
+        disabled={currentPage > movies?.total_pages}
+        onPress={setCurrentPage}
       />
     </View>
   );

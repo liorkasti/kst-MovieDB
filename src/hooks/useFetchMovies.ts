@@ -1,11 +1,11 @@
-import {Movie} from '../../shared/types';
+import {MoviesAPIProps} from '../../../shared/types';
 import {axiosInstance} from '../axiosInstance';
 import {api} from '../axiosInstance/constants';
 
 export const fetchMovies = async (
   endpoint: string,
   page: number,
-): Promise<Movie[]> => {
+): Promise<MoviesAPIProps | []> => {
   try {
     const {data} = await axiosInstance.get(
       `${endpoint}${api.Authorization}${api.pageIndex}${page}`,

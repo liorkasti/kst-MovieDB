@@ -1,5 +1,5 @@
 import {useQuery} from 'react-query';
-import {Movie} from '../../shared/types';
+import {Movie} from '../../../shared/types';
 import {getFavorites, queryClient} from '../state';
 
 export const useFavorites = () => {

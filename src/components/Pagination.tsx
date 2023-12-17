@@ -1,19 +1,16 @@
-import React, {FC, useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import React, {FC} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import {PaginationProps} from '../../../shared/types';
 import {COLORS} from '../constants/theme';
-import {PaginationProps} from '../../shared/types';
 
-const Pagination: FC<PaginationProps> = ({currentPage, onPress}) => {
-  const [disabled, setDisabled] = useState(true);
-
+const Pagination: FC<PaginationProps> = ({currentPage, disabled, onPress}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        activeOpacity={disabled ? 1 : 0.4}
+        activeOpacity={currentPage > 1 ? 1 : 0.4}
         onPress={() => {
-          setDisabled(false);
-          onPress(previousValue => previousValue - 1);
+          currentPage > 1 && onPress(currentPage - 1);
         }}>
         <Icon name="chevrons-left" style={styles.icon} />
       </TouchableOpacity>
@@ -23,10 +20,8 @@ const Pagination: FC<PaginationProps> = ({currentPage, onPress}) => {
       }`}</Text>
 
       <TouchableOpacity
-        onPress={() => {
-          onPress(previousValue => previousValue + 1);
-          setDisabled(false);
-        }}>
+        activeOpacity={currentPage > 1 ? 1 : 0.4}
+        onPressIn={() => !disabled && onPress(currentPage + 1)}>
         <Icon name="chevrons-right" style={styles.icon} />
       </TouchableOpacity>
     </View>
