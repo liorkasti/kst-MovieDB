@@ -1,5 +1,4 @@
-// Import necessary modules
-import React, {useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -10,92 +9,64 @@ import {
   View,
 } from 'react-native';
 import {MovieListProps} from '../../../shared/types';
-import {useFavorites} from '../hooks/useFavorites';
-import {useMovies} from '../hooks/useMovies';
-import {getFavorites} from '../state';
 import {api} from '../axiosInstance/constants';
-import Pagination from './Pagination';
-import {useQueryClient} from 'react-query';
-import {fetchMovies} from '../hooks/useFetchMovies';
+import {useFavorites} from '../hooks/useFavorites';
 
-const MovieList: React.FC<MovieListProps> = ({category}) => {
-  const {addFavorite, removeFavorite} = useFavorites();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const {data: movies, isLoading} = useMovies(category.endpoint, currentPage);
-
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (currentPage < movies?.total_pages) {
-      const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(['movies', nextPage], () =>
-        fetchMovies(category.endpoint, nextPage),
-      );
-    }
-  }, [category.endpoint, currentPage, movies?.total_pages, queryClient]);
-
-  const handleToggleFavorite = (movieId: number) => {
-    console.log(movieId);
-    if (getFavorites().includes(movieId)) {
-      removeFavorite(movieId);
-    } else {
-      addFavorite(movieId);
-    }
-  };
+const MovieList: FC<MovieListProps> = ({isLoading, movies, onPress}) => {
+  const {data: favorites} = useFavorites();
 
   if (isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
 
   return (
-    <View style={{flex: 1, padding: 16}}>
-      <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 16}}>
-        {category.name}
-      </Text>
-      <FlatList
-        data={movies?.results}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <View style={styles.movieContainer}>
-            <Image
-              style={styles.posterImage}
-              source={{
-                uri: `${api.posterUrlBase}${item.poster_path}`,
-              }}
-            />
-            <View style={{marginLeft: 8, flex: 1}}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                {item.title}
+    <FlatList
+      data={movies}
+      style={styles.container}
+      keyExtractor={item => item.id.toString()}
+      renderItem={({item}) => (
+        <View style={styles.movieContainer}>
+          <Image
+            style={styles.posterImage}
+            source={{
+              uri: `${api.posterUrlBase}${item.poster_path}`,
+            }}
+          />
+          <View style={styles.movieDetailsContainer}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.rating}>Rating: {item.vote_average}</Text>
+            <Text style={styles.overview} numberOfLines={5}>
+              {item.overview}
+            </Text>
+            <TouchableOpacity
+              style={styles.favoriteButton}
+              onPress={() => onPress(item.id)}>
+              <Text>
+                {favorites.includes(item.id)
+                  ? 'Remove from Favorites'
+                  : 'Add to Favorites'}
               </Text>
-              <Text style={{marginBottom: 4}}>Rating: {item.vote_average}</Text>
-              <Text style={{maxHeight: 100}}>{item.overview}</Text>
-              <TouchableOpacity
-                style={{marginTop: 10}}
-                onPress={() => handleToggleFavorite(item.id)}>
-                <Text>
-                  {getFavorites().includes(item.id)
-                    ? 'Remove from Favorites'
-                    : 'Add to Favorites'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
-        )}
-      />
-      <Pagination
-        currentPage={currentPage}
-        disabled={currentPage > movies?.total_pages}
-        onPress={setCurrentPage}
-      />
-    </View>
+        </View>
+      )}
+    />
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   movieContainer: {
     flexDirection: 'row',
     marginBottom: 16,
@@ -104,6 +75,23 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     borderRadius: 8,
+  },
+  movieDetailsContainer: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  rating: {
+    marginBottom: 4,
+  },
+  overview: {
+    maxHeight: 100,
+  },
+  favoriteButton: {
+    marginTop: 10,
   },
 });
 

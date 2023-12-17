@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 16,
+    marginBottom: 16,
     height: 16,
   },
   pagesIndication: {

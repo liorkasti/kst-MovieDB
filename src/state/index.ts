@@ -24,3 +24,7 @@ export const queryClient = generateQueryClient();
 export const getFavorites = () => {
   return queryClient.getQueryData('favorites') || [];
 };
+
+// export const getFavorites = async (): Promise<Movie[]> => {
+//   return (await axiosInstance.get('favorites')) || [];
+// };
