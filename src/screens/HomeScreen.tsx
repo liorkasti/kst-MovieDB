@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, Text, View, useColorScheme} from 'react-native';
+import {StyleSheet, Text, View, useColorScheme} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {useQueryClient} from 'react-query';
 import MovieList from '../components/MovieList';
@@ -9,7 +9,6 @@ import {useFavorites} from '../hooks/useFavorites';
 import {fetchMovies} from '../hooks/useFetchMovies';
 import {useMovies} from '../hooks/useMovies';
 import {getFavorites} from '../state';
-import {calcSize} from '../utils';
 
 const HomeScreen: React.FC = () => {
   const [selected, setSelected] = useState<number>(SELECTED_CATEGORIES[0].key);
