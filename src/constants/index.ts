@@ -1,4 +1,5 @@
-import {StatusBar} from 'react-native';
+import {Dimensions, StatusBar} from 'react-native';
+import {initialWindowMetrics} from 'react-native-safe-area-context';
 
 export const HIT_SLOP_10 = {top: 10, left: 10, right: 10, bottom: 10};
 export const titleStr = 'Title:';
@@ -14,3 +15,7 @@ export const SELECTED_CATEGORIES = [
   {key: 1, value: 'Popular'},
   {key: 2, value: 'Top Rated'},
 ];
+
+export const ZEPLIN_DEFAULT_WIDTH = 375;
+export const SCREEN_WIDTH = Dimensions.get('window').width;
+export const TOP_INSET = initialWindowMetrics?.insets.top ?? 0;

@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, useColorScheme} from 'react-native';
+import {Platform, StyleSheet, Text, View, useColorScheme} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {useQueryClient} from 'react-query';
 import MovieList from '../components/MovieList';
 import Pagination from '../components/Pagination';
-import {CATEGORIES, SELECTED_CATEGORIES} from '../constants';
+import {CATEGORIES, SELECTED_CATEGORIES, TOP_INSET} from '../constants';
 import {useFavorites} from '../hooks/useFavorites';
 import {fetchMovies} from '../hooks/useFetchMovies';
 import {useMovies} from '../hooks/useMovies';
 import {getFavorites} from '../state';
+import {calcSize} from '../utils';
 
 const HomeScreen: React.FC = () => {
   const [selected, setSelected] = useState<number>(SELECTED_CATEGORIES[0].key);
@@ -76,7 +77,7 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: TOP_INSET,
     paddingHorizontal: 24,
   },
 });
