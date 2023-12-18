@@ -5,18 +5,39 @@ import {Movie, ToggleFavoritesProps} from '../../../shared/types';
 export const useFavorites = (): ToggleFavoritesProps => {
   const queryClient = useQueryClient();
 
-  const {data: favorites = []} = useQuery('favorites', getFavorites);
+  const fallback: Movie[] = [];
+  const {
+    isError,
+    isLoading,
+    data = fallback,
+    isSuccess,
+  } = useQuery('favorites', getFavorites);
 
-  const addFavorite = (movieId: number) => {
-    queryClient.setQueryData('favorites', [...favorites, movieId]);
+  const addFavorite = (movie: Movie) => {
+    queryClient.setQueryData(['favorites'], [...data, movie]);
   };
 
-  const removeFavorite = (movieId: number) => {
+  const removeFavorite = (movie: Movie) => {
     queryClient.setQueryData(
       'favorites',
-      favorites.filter(id => id !== movieId),
+      data.filter(m => m.id !== movie.id),
     );
   };
 
-  return {data: favorites as Movie[], addFavorite, removeFavorite};
+  // return {data: favorites as Movie[], addFavorite, removeFavorite};
+
+  if (isSuccess && !isError) {
+    return {
+      data,
+      addFavorite,
+      removeFavorite,
+      isLoading,
+    };
+  }
+  return {
+    data,
+    addFavorite,
+    removeFavorite,
+    isLoading,
+  };
 };

@@ -2,16 +2,17 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
 import {useFavorites} from '../hooks/useFavorites';
 import {COLORS} from '../constants/theme';
+import MovieList from '../components/MovieList';
+import {TOP_INSET} from '../constants';
 
 const ProfileScreen: FC = () => {
-  const {data: favorites} = useFavorites();
-
-  console.log(`Total Favorites: ${favorites.length}`);
+  const {data: favorites, isLoading} = useFavorites();
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Favorites</Text>
+      <Text style={styles.title}>My Favorites</Text>
       <Text>{`Total Favorites: ${favorites.length}`}</Text>
+      <MovieList isLoading={isLoading} movies={favorites} />
     </View>
   );
 };
@@ -19,9 +20,13 @@ const ProfileScreen: FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 24,
     backgroundColor: COLORS.bkg,
+    paddingTop: TOP_INSET,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

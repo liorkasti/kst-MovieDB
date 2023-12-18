@@ -7,6 +7,7 @@ export const useMovies = (endpoint: string, page: number): MoviesQuery => {
   const {
     isError,
     isLoading,
+    isFetching,
     data = fallback,
     error,
     isSuccess,
@@ -16,11 +17,16 @@ export const useMovies = (endpoint: string, page: number): MoviesQuery => {
     return {
       data: data as MoviesAPIProps,
       isLoading,
+      isError,
+      isFetching,
+      error,
     };
   }
   return {
+    data: data as MoviesAPIProps,
     isError,
     isLoading,
+    isFetching,
     error: error as Error,
   };
 };

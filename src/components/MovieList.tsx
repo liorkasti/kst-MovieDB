@@ -8,12 +8,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {MovieListProps} from '../../../shared/types';
+import {Movie, MovieListProps} from '../../../shared/types';
 import {api} from '../axiosInstance/constants';
 import {useFavorites} from '../hooks/useFavorites';
+import {isFavorite} from '../hooks/useIsFavorites';
 
-const MovieList: FC<MovieListProps> = ({isLoading, movies, onPress}) => {
-  const {data: favorites} = useFavorites();
+const MovieList: FC<MovieListProps> = ({isLoading, movies}) => {
+  const {addFavorite, removeFavorite} = useFavorites();
+
+  const handleToggleFavorite = (movie: Movie) => {
+    if (isFavorite(movie.id)) {
+      removeFavorite(movie);
+    } else {
+      addFavorite(movie);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -27,7 +36,7 @@ const MovieList: FC<MovieListProps> = ({isLoading, movies, onPress}) => {
     <FlatList
       data={movies}
       style={styles.container}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={item => '' + item.id}
       renderItem={({item}) => (
         <View style={styles.movieContainer}>
           <Image
@@ -44,9 +53,9 @@ const MovieList: FC<MovieListProps> = ({isLoading, movies, onPress}) => {
             </Text>
             <TouchableOpacity
               style={styles.favoriteButton}
-              onPress={() => onPress(item.id)}>
+              onPress={() => handleToggleFavorite(item)}>
               <Text>
-                {favorites.includes(item.id)
+                {isFavorite(item.id)
                   ? 'Remove from Favorites'
                   : 'Add to Favorites'}
               </Text>
@@ -73,7 +82,6 @@ const styles = StyleSheet.create({
   },
   posterImage: {
     width: 100,
-    height: 150,
     borderRadius: 8,
   },
   movieDetailsContainer: {

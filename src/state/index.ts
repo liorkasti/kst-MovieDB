@@ -1,5 +1,6 @@
 import {QueryClient} from 'react-query';
 import {useQueryErrorHandler} from '../hooks/useQueryErrorHandler';
+import {Movie} from '../../../shared/types';
 
 export const generateQueryClient = (): QueryClient => {
   return new QueryClient({
@@ -21,7 +22,7 @@ export const generateQueryClient = (): QueryClient => {
 
 export const queryClient = generateQueryClient();
 
-export const getFavorites = () => {
+export const getFavorites = (): Movie[] => {
   return queryClient.getQueryData('favorites') || [];
 };
 

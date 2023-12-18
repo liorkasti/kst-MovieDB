@@ -32,18 +32,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
-    height: 16,
+    alignItems: 'center',
+    marginBottom: 10,
   },
   pagesIndication: {
-    width: 'auto',
-    height: 20,
     textAlign: 'center',
     fontSize: 12,
-    fontWeight: '300',
+    fontWeight: '400',
     color: COLORS.movieLight,
   },
   icon: {
+    fontSize: 14,
+    fontWeight: '300',
     color: COLORS.movieLight,
   },
 });

@@ -5,10 +5,8 @@ import {useQueryClient} from 'react-query';
 import MovieList from '../components/MovieList';
 import Pagination from '../components/Pagination';
 import {CATEGORIES, SELECTED_CATEGORIES, TOP_INSET} from '../constants';
-import {useFavorites} from '../hooks/useFavorites';
 import {fetchMovies} from '../hooks/useFetchMovies';
 import {useMovies} from '../hooks/useMovies';
-import {getFavorites} from '../state';
 
 const HomeScreen: React.FC = () => {
   const [selected, setSelected] = useState<number>(SELECTED_CATEGORIES[0].key);
@@ -17,9 +15,7 @@ const HomeScreen: React.FC = () => {
 
   const category = CATEGORIES[selected - 1].value;
 
-  const {addFavorite, removeFavorite} = useFavorites();
   const {data, isLoading} = useMovies(category.endpoint, currentPage);
-
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -30,15 +26,6 @@ const HomeScreen: React.FC = () => {
       );
     }
   }, [category.endpoint, currentPage, data, queryClient]);
-
-  const handleToggleFavorite = (movieId: number) => {
-    console.log(movieId);
-    if (getFavorites().includes(movieId)) {
-      removeFavorite(movieId);
-    } else {
-      addFavorite(movieId);
-    }
-  };
 
   return (
     <View
@@ -59,11 +46,7 @@ const HomeScreen: React.FC = () => {
         save="key"
         placeholder={'Choose Category'}
       />
-      <MovieList
-        isLoading={isLoading}
-        movies={data?.results}
-        onPress={handleToggleFavorite}
-      />
+      <MovieList isLoading={isLoading} movies={data?.results} />
       <Pagination
         currentPage={currentPage}
         disabled={currentPage > data?.total_pages}
