@@ -11,15 +11,17 @@ export const useFavorites = (): ToggleFavoritesProps => {
     isLoading,
     data = fallback,
     isSuccess,
-  } = useQuery('favorites', getFavorites);
+  } = useQuery<Movie[]>('favorites', getFavorites);
 
   const addFavorite = (movie: Movie) => {
-    queryClient.setQueryData(['favorites'], [...data, movie]);
+    queryClient.setQueryData(
+      ['favorites'],
+      [...data, {...movie, is_liked: true}],
+    );
   };
 
   const removeFavorite = (movie: Movie) => {
-    queryClient.setQueryData(
-      'favorites',
+    queryClient.setQueryData('favorites', () =>
       data.filter(m => m.id !== movie.id),
     );
   };

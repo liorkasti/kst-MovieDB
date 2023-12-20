@@ -5,7 +5,7 @@ import {api} from '../axiosInstance/constants';
 export const fetchMovies = async (
   endpoint: string,
   page: number,
-): Promise<MoviesAPIProps | []> => {
+): Promise<MoviesAPIProps> => {
   try {
     const {data} = await axiosInstance.get(
       `${endpoint}${api.Authorization}${api.pageIndex}${page}`,
